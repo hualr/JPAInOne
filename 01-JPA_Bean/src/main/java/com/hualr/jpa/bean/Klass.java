@@ -41,7 +41,7 @@ public class Klass {
             mappedBy = "klass",
             cascade = CascadeType.ALL,
             fetch = FetchType.EAGER)
-    @Fetch(FetchMode.SUBSELECT)
+   // @Fetch(FetchMode.SUBSELECT)
     List<Student> students;
 
     public String getClassId() {

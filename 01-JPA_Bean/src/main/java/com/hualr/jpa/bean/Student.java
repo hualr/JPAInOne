@@ -1,5 +1,6 @@
 package com.hualr.jpa.bean;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -36,6 +37,8 @@ public class Student {
      */
     @OneToOne(
             targetEntity = Klass.class,
+            //ZNN 级联关系的保存由此确认 不设置会出现瞬时状态导致无法增删改查的问题
+            cascade = CascadeType.ALL,
             fetch = FetchType.LAZY)
     @JoinColumn(name = "class_id")
     private Klass klass;

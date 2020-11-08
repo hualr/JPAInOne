@@ -33,14 +33,18 @@ class SpringInOneApplicationTests {
         Student student1=new Student();
         student1.setAge(11);
         student1.setStudentName("网民");
-
+        student1.setKlass(klass);
         Student student2=new Student();
         student2.setAge(11);
         student2.setStudentName("网民");
-        klass.setStudents(Arrays.asList(student1,student2));
+        //klass.setStudents(Arrays.asList(student1,student2));
         /**
          * 1. 单独save 1 此时,由于1中set了多属性,因此,会顺便save多 但是多对应的1属性是无法拿到的
          */
-        klassDao.save(klass);
+//        klassDao.save(klass);
+        /**
+         * 结论 谁维护表,那么谁去save.这才是核心:这才不会出现外键丢失的情况
+         */
+        studentDao.save(student1);
     }
 }
