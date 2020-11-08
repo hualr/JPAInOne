@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import org.hibernate.annotations.DynamicUpdate;
 
 /**
  * Author: zongqi
@@ -19,6 +20,8 @@ import javax.persistence.Table;
  */
 @Entity
 @Table
+//这个注解可以保证之前为空的值 之后不会被更新
+@DynamicUpdate
 public class Student {
     /**
      * 1 ZNN 如果配置为自增类型 那么这意味着主键必须为数字类型的值

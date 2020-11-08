@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import javax.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,5 +75,33 @@ class SpringInOneApplicationTests {
         klass.setHeadMaster("梨花 1");
         //第二次save 1
         klassDao.save(klass);
+    }
+
+    /**
+     * 事务的隔离机制
+     * 1. 隔离机制导致的查询结果不是看什么时候事务开始 而是看什么时候进行第一次查询 第一次查询一定是从实际数据库中拉取的(这是我目前的理解)
+     * 2. 两个事务同时save 由于都是基于第一次的查询 因此会存在save覆盖的现象
+     * 3. 为了避免覆盖 我们可以指定save的属性为只update修改过的属性 即为只update set过的属性
+     * 4. jpa的优化机制可以保证save之前和save之后没有变化的时候,就不会进行任何更新
+     *
+     *在此处我引入了动态更新属性 该属性保证如果原本就没有更新一个空值 那么就不会以此时的null覆盖更新
+     */
+    @Test
+    @Transactional
+    @Rollback(false)
+    public void test3() {
+        Optional<Student> studentOption = studentDao.findById(4);
+        Student student = studentOption.get();
+        student.setAge(1002);
+        studentDao.save(student);
+    }
+    @Test
+    @Transactional
+    @Rollback(false)
+    public void test4() {
+        Optional<Student> studentOption = studentDao.findById(4);
+        Student student = studentOption.get();
+        student.setStudentName("小秘密22222");
+        studentDao.save(student);
     }
 }
