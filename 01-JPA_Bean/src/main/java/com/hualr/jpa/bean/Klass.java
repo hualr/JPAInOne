@@ -9,6 +9,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
@@ -31,6 +33,8 @@ public class Klass {
     @Column
     String className;
     @Column
+    String headMaster;
+    @Column
     /**
      * 1. ZNN 如果是一对多 一般设置1去放弃维护权 由多去维护
      * 2. target表示的始终是对端配置
@@ -42,6 +46,7 @@ public class Klass {
             cascade = CascadeType.ALL,
             fetch = FetchType.EAGER)
    // @Fetch(FetchMode.SUBSELECT)
+    //注意到 多对多只能用List 不能用其他实际接口
     List<Student> students;
 
     public String getClassId() {
@@ -66,5 +71,13 @@ public class Klass {
 
     public void setStudents(List<Student> students) {
         this.students = students;
+    }
+
+    public String getHeadMaster() {
+        return headMaster;
+    }
+
+    public void setHeadMaster(String headMaster) {
+        this.headMaster = headMaster;
     }
 }

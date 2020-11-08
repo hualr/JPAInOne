@@ -6,7 +6,11 @@ import com.hualr.jpa.dao.KlassDao;
 import com.hualr.jpa.dao.StudentDao;
 import com.hualr.jpa.service.api.KlassService;
 import com.hualr.jpa.service.api.StudentService;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import javax.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,8 +47,32 @@ class SpringInOneApplicationTests {
          */
 //        klassDao.save(klass);
         /**
-         * 结论 谁维护表,那么谁去save.这才是核心:这才不会出现外键丢失的情况
+         * 2. 多去save -->谁维护表,那么谁去save.这才是核心:这才不会出现外键丢失的情况
          */
         studentDao.save(student1);
+    }
+
+    /**
+     * 在同一个事务中,save的确有更新的作用.
+     */
+
+    @Test
+    @Transactional
+    @Rollback(false)
+    public void test2() {
+        Klass klass=new Klass();
+        klass.setClassName("小葵班");
+        //第一次 save 1
+         klassDao.save(klass);
+        Student student1=new Student();
+        student1.setAge(11);
+        student1.setKlass(klass);
+        List<Student> students=new ArrayList<>();
+        students.add(student1);
+        //ZNN 这里无法直接Arrays.asList
+        klass.setStudents(students);
+        klass.setHeadMaster("梨花 1");
+        //第二次save 1
+        klassDao.save(klass);
     }
 }
