@@ -1,5 +1,6 @@
 package com.hualr.jpa.bean;
 
+import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -76,5 +77,35 @@ public class Student {
 
     public void setKlass(Klass klass) {
         this.klass = klass;
+    }
+
+    @Override
+    public String toString() {
+        return "Student{" +
+                "studentId=" + studentId +
+                ", studentName='" + studentName + '\'' +
+                ", age=" + age +
+                ", klass=" + klass +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Student student = (Student) o;
+        return Objects.equals(studentId, student.studentId) &&
+                Objects.equals(studentName, student.studentName) &&
+                Objects.equals(age, student.age) &&
+                Objects.equals(klass, student.klass);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(studentId, studentName, age, klass);
     }
 }

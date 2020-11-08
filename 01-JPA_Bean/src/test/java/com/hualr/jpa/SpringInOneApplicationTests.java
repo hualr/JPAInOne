@@ -33,13 +33,13 @@ class SpringInOneApplicationTests {
     @Transactional
     @Rollback(false)
     public void test1() {
-        Klass klass=new Klass();
+        Klass klass = new Klass();
         klass.setClassName("小葵班");
-        Student student1=new Student();
+        Student student1 = new Student();
         student1.setAge(11);
         student1.setStudentName("网民");
         student1.setKlass(klass);
-        Student student2=new Student();
+        Student student2 = new Student();
         student2.setAge(11);
         student2.setStudentName("网民");
         //klass.setStudents(Arrays.asList(student1,student2));
@@ -61,14 +61,14 @@ class SpringInOneApplicationTests {
     @Transactional
     @Rollback(false)
     public void test2() {
-        Klass klass=new Klass();
+        Klass klass = new Klass();
         klass.setClassName("小葵班");
         //第一次 save 1
-         klassDao.save(klass);
-        Student student1=new Student();
+        klassDao.save(klass);
+        Student student1 = new Student();
         student1.setAge(11);
         student1.setKlass(klass);
-        List<Student> students=new ArrayList<>();
+        List<Student> students = new ArrayList<>();
         students.add(student1);
         //ZNN 这里无法直接Arrays.asList
         klass.setStudents(students);
@@ -105,6 +105,7 @@ class SpringInOneApplicationTests {
         //05 修改后进行提交 此时数据库更新 锁失效
         studentDao.save(student);
     }
+
     @Test
     @Transactional
     @Rollback(false)
@@ -116,5 +117,49 @@ class SpringInOneApplicationTests {
         Student student = studentOption.get();
         student.setStudentName("小秘密1111122222");
         studentDao.save(student);
+    }
+
+    @Test
+    @Transactional
+    @Rollback(false)
+    public void test5() {
+        Optional<Student> studentOption;
+        Student student1 = null;
+        Student student2 = null;
+        while (true) {
+            student1 = student2;
+            //只会查询一次在一个事务中
+            studentOption = studentDao.findById(4);
+            student2 = studentOption.get();
+            if (student1 != null && !student1.equals(student2)) {
+                System.out.println("student1" + student1);
+                System.out.println("student2" + student2);
+            }
+        }
+    }
+
+    /**
+     * 对于排他锁 会保持时刻的查询 但是没有任何意义啊 因为一旦加锁了 这行数据就不会进行任何修改了
+     * 且如果进行了第一次查询 排他锁查询的也只是第一次查询的结果 没有任何意义!!
+     */
+
+    @Test
+    @Transactional
+    @Rollback(false)
+    public void test6() {
+        Optional<Student> studentOption;
+        Student student1 = null;
+        Student student2 = null;
+        Student student3 = studentDao.findById(4).get();
+        while (true) {
+            student1 = student2;
+            //只会查询一次在一个事务中
+            studentOption = studentDao.findStudentById(4);
+            student2 = studentOption.get();
+            if (student1 != null && !student1.equals(student2)) {
+                System.out.println("student1" + student1);
+                System.out.println("student2" + student2);
+            }
+        }
     }
 }
