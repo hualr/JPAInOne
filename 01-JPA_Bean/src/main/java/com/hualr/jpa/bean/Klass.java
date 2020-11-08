@@ -1,10 +1,16 @@
 package com.hualr.jpa.bean;
 
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -24,8 +30,19 @@ public class Klass {
     String classId;
     @Column
     String className;
-/*    @Column
-    List<Student> students;*/
+    @Column
+    /**
+     * 1. ZNN 如果是一对多 一般设置1去放弃维护权 由多去维护
+     * 2. target表示的始终是对端配置
+     * 3. mappedBy 表示的是对端对应的bean属性name
+     */
+    @OneToMany(
+            targetEntity = Student.class,
+            mappedBy = "klass",
+            cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER)
+    @Fetch(FetchMode.SUBSELECT)
+    List<Student> students;
 
     public String getClassId() {
         return classId;
@@ -41,5 +58,13 @@ public class Klass {
 
     public void setClassName(String className) {
         this.className = className;
+    }
+
+    public List<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(List<Student> students) {
+        this.students = students;
     }
 }

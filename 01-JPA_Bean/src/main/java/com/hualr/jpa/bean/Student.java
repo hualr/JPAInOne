@@ -2,9 +2,12 @@ package com.hualr.jpa.bean;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 /**
@@ -16,14 +19,26 @@ import javax.persistence.Table;
 @Entity
 @Table
 public class Student {
+    /**
+     * 1 ZNN 如果配置为自增类型 那么这意味着主键必须为数字类型的值
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
-    Integer studentId;
+    private Integer studentId;
     @Column
-    String studentName;
+    private String studentName;
     @Column
-    String age;
+    private Integer age;
+
+    /**
+     * 1. 关联关系没有@Column注解
+     */
+    @OneToOne(
+            targetEntity = Klass.class,
+            fetch = FetchType.LAZY)
+    @JoinColumn(name = "class_id")
+    private Klass klass;
 
     public Integer getStudentId() {
         return studentId;
@@ -41,11 +56,19 @@ public class Student {
         this.studentName = studentName;
     }
 
-    public String getAge() {
+    public Integer getAge() {
         return age;
     }
 
-    public void setAge(String age) {
+    public void setAge(Integer age) {
         this.age = age;
+    }
+
+    public Klass getKlass() {
+        return klass;
+    }
+
+    public void setKlass(Klass klass) {
+        this.klass = klass;
     }
 }

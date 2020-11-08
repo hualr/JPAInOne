@@ -1,0 +1,21 @@
+# Project exclude paths
+/01-JPA_Bean/target/
+### Example user template template
+### Example user template
+
+# IntelliJ project files
+.idea
+*.iml
+out
+gen
+.idea/.gitignore
+.idea/checkstyle-idea.xml
+.idea/checkstyleidea.tmp/
+.idea/compiler.xml
+.idea/encodings.xml
+.idea/inspectionProfiles/
+.idea/jarRepositories.xml
+.idea/junitgenerator-prj-settings.xml
+.idea/misc.xml
+.idea/uiDesigner.xml
+JPAInOne.iml
