@@ -86,22 +86,35 @@ class SpringInOneApplicationTests {
      *
      *在此处我引入了动态更新属性 该属性保证如果原本就没有更新一个空值 那么就不会以此时的null覆盖更新
      */
+
+    /**
+     * 理解排他锁
+     * 实际上排他锁并非是当前查 在jpa中,如果即便使用排他锁,此时读取的也是第一次select的值.这是为了保证事务的一致性
+     * 你无法让两次一毛一样的查询出现不一样的结果 这违背了事务的一致性 所以,在使用排他锁之前,千万不要进行一次不加锁的查询
+     * 否则此时排他锁查询到的东西,一定是第一次查询的结果
+     */
     @Test
     @Transactional
     @Rollback(false)
     public void test3() {
-        Optional<Student> studentOption = studentDao.findById(4);
+        //01 事务1开启
+        //03 此时对4行表加锁
+        Optional<Student> studentOption = studentDao.findStudentById(4);
         Student student = studentOption.get();
-        student.setAge(1002);
+        student.setAge(1003);
+        //05 修改后进行提交 此时数据库更新 锁失效
         studentDao.save(student);
     }
     @Test
     @Transactional
     @Rollback(false)
     public void test4() {
-        Optional<Student> studentOption = studentDao.findById(4);
+        //02 事务2开始
+        //04 此时想要对4行表查询加锁 但是发现此时4表上已经存在锁 因此陷入等待状态
+        //06 此时,检验到锁不存在 因此继续进行操作 先加锁 后进行当前查询
+        Optional<Student> studentOption = studentDao.findStudentById(4);
         Student student = studentOption.get();
-        student.setStudentName("小秘密22222");
+        student.setStudentName("小秘密1111122222");
         studentDao.save(student);
     }
 }
