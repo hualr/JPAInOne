@@ -7,9 +7,6 @@ import com.hualr.jpa.dao.StudentDao;
 import com.hualr.jpa.service.api.KlassService;
 import com.hualr.jpa.service.api.StudentService;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import javax.transaction.Transactional;
@@ -19,7 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 
 @SpringBootTest
-class SpringInOneApplicationTests {
+class SpringInOneApplicationTest1 {
     @Autowired
     StudentService studentService;
     @Autowired

@@ -9,6 +9,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -40,7 +42,8 @@ public class Klass {
             targetEntity = Student.class,
             mappedBy = "klass",
             cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER)
+            fetch = FetchType.LAZY
+            )
    // @Fetch(FetchMode.SUBSELECT)
     //注意到 多对多只能用List 不能用其他实际接口
     List<Student> students;
@@ -75,5 +78,15 @@ public class Klass {
 
     public void setHeadMaster(String headMaster) {
         this.headMaster = headMaster;
+    }
+
+    //ZNN 堆栈溢出  class想去找student student又想来找class
+    @Override
+    public String toString() {
+        return "Klass{" +
+                "classId='" + classId + '\'' +
+                ", className='" + className + '\'' +
+                ", headMaster='" + headMaster + '\'' +
+                '}';
     }
 }
