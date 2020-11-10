@@ -21,7 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.orm.jpa.EntityManagerFactoryUtils;
 import org.springframework.orm.jpa.EntityManagerHolder;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
@@ -41,10 +40,12 @@ class SpringInOneApplicationTest2 {
     StudentDao studentDao;
     @Autowired
     KlassDao klassDao;
-    @PersistenceContext
-    EntityManager entityManager;
     @PersistenceUnit
     private EntityManagerFactory emFactory;
+    @PersistenceContext
+    //EntityManager是JPA中用于增删改查的接口，它的作用相当于一座桥梁，连接内存中的java对象和数据库的数据存储。
+    EntityManager entityManager;
+    private static ThreadLocal<EntityManager> tl=new ThreadLocal<EntityManager>();
 
 
     @Test
@@ -68,7 +69,6 @@ class SpringInOneApplicationTest2 {
         Optional<Klass> klass = klassDao.findById("40286c8175a85ffe0175a8600d930000");
         Klass klass1 = klass.get();
         List<Student> students = klass1.getStudents();
-        System.out.println(students);
         return true;
     }
 
