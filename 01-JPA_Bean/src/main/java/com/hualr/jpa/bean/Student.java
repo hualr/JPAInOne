@@ -1,6 +1,5 @@
 package com.hualr.jpa.bean;
 
-import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import lombok.Data;
+import lombok.experimental.Accessors;
 import org.hibernate.annotations.DynamicUpdate;
 
 /**
@@ -23,6 +24,8 @@ import org.hibernate.annotations.DynamicUpdate;
 @Table
 //这个注解可以保证之前为空的值 之后不会被更新
 @DynamicUpdate
+@Data
+@Accessors(chain = true)
 public class Student {
     /**
      * 1 ZNN 如果配置为自增类型 那么这意味着主键必须为数字类型的值
@@ -47,65 +50,4 @@ public class Student {
     @JoinColumn(name = "class_id")
     private Klass klass;
 
-    public Integer getStudentId() {
-        return studentId;
-    }
-
-    public void setStudentId(Integer studentId) {
-        this.studentId = studentId;
-    }
-
-    public String getStudentName() {
-        return studentName;
-    }
-
-    public void setStudentName(String studentName) {
-        this.studentName = studentName;
-    }
-
-    public Integer getAge() {
-        return age;
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
-    }
-
-    public Klass getKlass() {
-        return klass;
-    }
-
-    public void setKlass(Klass klass) {
-        this.klass = klass;
-    }
-
-    @Override
-    public String toString() {
-        return "Student{" +
-                "studentId=" + studentId +
-                ", studentName='" + studentName + '\'' +
-                ", age=" + age +
-                ", klass=" + klass +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        Student student = (Student) o;
-        return Objects.equals(studentId, student.studentId) &&
-                Objects.equals(studentName, student.studentName) &&
-                Objects.equals(age, student.age) &&
-                Objects.equals(klass, student.klass);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(studentId, studentName, age, klass);
-    }
 }

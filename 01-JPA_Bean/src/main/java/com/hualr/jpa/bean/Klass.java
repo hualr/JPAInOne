@@ -9,8 +9,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+import lombok.Data;
+import lombok.experimental.Accessors;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -21,6 +21,8 @@ import org.hibernate.annotations.GenericGenerator;
  */
 @Entity
 @Table
+@Data
+@Accessors(chain = true)
 public class Klass {
 
     @Id
@@ -48,45 +50,5 @@ public class Klass {
     //注意到 多对多只能用List 不能用其他实际接口
     List<Student> students;
 
-    public String getClassId() {
-        return classId;
-    }
-
-    public void setClassId(String classId) {
-        this.classId = classId;
-    }
-
-    public String getClassName() {
-        return className;
-    }
-
-    public void setClassName(String className) {
-        this.className = className;
-    }
-
-    public List<Student> getStudents() {
-        return students;
-    }
-
-    public void setStudents(List<Student> students) {
-        this.students = students;
-    }
-
-    public String getHeadMaster() {
-        return headMaster;
-    }
-
-    public void setHeadMaster(String headMaster) {
-        this.headMaster = headMaster;
-    }
-
-    //ZNN 堆栈溢出  class想去找student student又想来找class
-    @Override
-    public String toString() {
-        return "Klass{" +
-                "classId='" + classId + '\'' +
-                ", className='" + className + '\'' +
-                ", headMaster='" + headMaster + '\'' +
-                '}';
-    }
+    //ZNN 堆栈溢出  String class想去找student student又想来找class
 }
